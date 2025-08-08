@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
   roleOptions = Object.values(UserRole);
   emailFromQuery: string | null = null;
   tokenFromQuery: string | null = null;
-  frontendBase = 'http://localhost:4200';
+  frontendBase = 'https://prolance-angular.vercel.app';
   currentForm: 'login' | 'forgotPassword' | 'resetPassword' = 'login';
   passwordStrength: number = 0;
   passwordStrengthText: string = '';

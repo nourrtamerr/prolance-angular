@@ -123,7 +123,7 @@ export class RegisterComponent implements OnInit {
   }
 
   errorMessage:string=""
-  frontendBase = 'http://localhost:4200';
+  frontendBase = 'https://prolance-angular.vercel.app';
   provider:string="Google"
   private roleModal: any;
   externalLoginValueCapture(provider: 'Google' | 'Facebook')
