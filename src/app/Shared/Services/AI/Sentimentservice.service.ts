@@ -14,7 +14,9 @@ export class SentimentService {
 
   analyze(text: string): Observable<{ prediction: string; probability: number }> {
     return this.http.post<{ prediction: string; probability: number }>(
-      'https://localhost:7093/api/sentiment/analyze', 
+      // 'https://localhost:7093/api/sentiment/analyze', 
+      'https://prolancework.runasp.net/api/sentiment/analyze', 
+
       { Text: text }  // Match the C# model property name
     );
   }
