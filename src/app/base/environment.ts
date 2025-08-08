@@ -10,7 +10,7 @@ export enum Environment {
    signalRUrl= 'https://prolancework.runasp.net/chathub',
    notificationsUrl= 'https://prolancework.runasp.net/notification',
    biddingUrl= 'https://prolancework.runasp.net/biddingHub'
-  //  baseUrl= "http://localhost:5045/api/",
+
 
 }
 export enum Files {
