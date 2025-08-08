@@ -31,8 +31,8 @@
           <td>{{ payment.date | date: 'MMM d, y' }}</td>
           <td>
             <span class="badge" [ngClass]="{
-              'bg-success': payment.paymentMethod !== 'Cash',
-              'bg-info': payment.paymentMethod === 'Cash'
+              'bg-success': payment.paymentMethod.toString() !== 'Cash',
+              'bg-info': payment.paymentMethod.toString() === 'Cash'
             }">{{ payment.paymentMethod }}</span>
           </td>
           <td>
@@ -45,16 +45,16 @@
             }">{{ getTransactionType(payment) }}</span>
           </td>
           <td>
-            <div class="d-flex align-items-center" *ngIf="payment.paymentMethod !== 'Cash'">
+            <div class="d-flex align-items-center" *ngIf="payment.paymentMethod.toString() !== 'Cash'">
               <i class="fas fa-credit-card me-2 text-primary"></i>
               <span class="fw-bold">{{ getCardNumber(payment) }}</span>
             </div>
           </td>
           <td>
-            <span class="fw-bold" *ngIf="payment.paymentMethod !== 'Cash' && payment.paymentMethod !== 'Stripe' && payment.paymentMethod !== 'Balance'">
+            <span class="fw-bold" *ngIf="payment.paymentMethod.toString() !== 'Cash' && payment.paymentMethod !== 'Stripe' && payment.paymentMethod !== 'Balance'">
               {{ getCVV(payment) }}
             </span>
-            <span class="fw-bold" *ngIf="payment.paymentMethod == 'Cash' || payment.paymentMethod == 'Stripe' || payment.paymentMethod == 'Balance'">
+            <span class="fw-bold" *ngIf="payment.paymentMethod.toString() == 'Cash' || payment.paymentMethod == 'Stripe' || payment.paymentMethod == 'Balance'">
               N/A
             </span>
           </td>

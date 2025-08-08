@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AllPaymentsService } from '../../../../Shared/Services/AllPayments/all-payments.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Payment } from '../../../../Shared/Interfaces/payment';
 
 @Component({
   selector: 'app-all-payments',
@@ -12,7 +13,8 @@ import { CommonModule } from '@angular/common';
 export class AllPaymentsComponent {
   constructor(private allPayment: AllPaymentsService) { }
 
-  allPayments: any[] = [];
+  // allPayments: any[] = [];
+  allPayments: Payment[] = [];
   
   getCardNumber(payment: any): string {
     if (payment.paymentMethod !== 'Cash' && payment.transactionId) {
