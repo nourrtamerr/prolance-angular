@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Environment } from '../../../base/environment';
 import { AppUser, AppUsers, ClientsFilter, ClientsView, ClientView, CreateAdminDTO, EditProfileDTO, FilteredClients, FilteredFreelancers, ForgotPasswordDTO, Freelancers, FreelancersFilter, FreelancerView, IdentityVerificationRequest, LoginDTO, RankEnum, RefreshTokenDTO, RegisterDTO, ResetPasswordDTO, SingularFreelancer, Tokens, UserRole, UsersRequestingVerificaiton, VerificationDecision } from '../../Interfaces/Account';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { DisputeDTO } from '../../../Layout/Pages/disputesystem/disputesystem.component';
 interface CreateAdminResponse {
@@ -225,23 +225,36 @@ return this._HttpClient.post<string>(`${this.apiUrl}/Testingformdata`, formData2
   }
 
 
+// ExternalLogin(provider: string, role?: UserRole, returnUrl?: string, errorUrl?: string): Observable<any> {
+//   let params = new HttpParams()
+//     .set('provider', provider)
+//     .set('returnUrl', returnUrl || '')
+//     .set('errorurl', errorUrl || '');
+
+//   if (role) {
+//     params = params.set('role', role);
+//   }
+
+//   const url = `${this.apiUrl}/External-login?${params.toString()}`;
+
+//   return new Observable(observer => {
+//     window.location.href = url;
+//     observer.next(null);
+//     observer.complete();
+//   });
+// }
+
 ExternalLogin(provider: string, role?: UserRole, returnUrl?: string, errorUrl?: string): Observable<any> {
-  let params = new HttpParams()
-    .set('provider', provider)
-    .set('returnUrl', returnUrl || '')
-    .set('errorurl', errorUrl || '');
+  // ✅ Corrected: Use Angular's URL construction
+  const params = new URLSearchParams();
+  params.set('provider', provider);
+  if (role) params.set('role', role);
+  if (returnUrl) params.set('returnUrl', returnUrl);
+  if (errorUrl) params.set('errorurl', errorUrl);
 
-  if (role) {
-    params = params.set('role', role);
-  }
-
-  const url = `${this.apiUrl}/External-login?${params.toString()}`;
-
-  return new Observable(observer => {
-    window.location.href = url;
-    observer.next(null);
-    observer.complete();
-  });
+  const url = `${Environment.baseUrl}Account/External-login?${params.toString()}`;
+  window.location.href = url; // Redirect to backend OAuth endpoint
+  return of(null); // Return observable to satisfy Angular
 }
 
 
