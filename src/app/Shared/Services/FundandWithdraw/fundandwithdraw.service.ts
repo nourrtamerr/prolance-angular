@@ -35,7 +35,7 @@ export class FundandwithdrawService {
   }
   stripewithdraw(amount:number,email:string):Observable<any> {
     // return this._HttpClient.get<any>(`${this.apiUrl}/StripeWithdraw?money=${amount}&email=${email}`);
-    return this._HttpClient.post<any>(`${this.apiUrl}/StripeWithdraw`,{money:amount,email:email});
+    return this._HttpClient.post<any>(`${this.apiUrl}/StripeWithdraw`,{money:amount,email:email},{withCredentials:true});
 
   }
 
