@@ -110,6 +110,8 @@ export class LoginComponent implements OnInit {
       }
     });
 
+    this.checkExternalLogin();
+;
     console.log('Role:', this.authService.getRole());
 
     this.processQueryParams();
@@ -198,7 +200,34 @@ export class LoginComponent implements OnInit {
         })
       )
       .subscribe();
+
+    //this._AccountService.ExternalLogin(provider, role, returnUrl, errorUrl);
+
+
+
   }
+
+
+  checkExternalLogin(): void {
+  const url = new URL(window.location.href);
+  const error = url.searchParams.get('error');
+  const success = url.searchParams.get('success');
+
+  if (error) {
+    console.error('External login error:', error);
+    this._ToastrService.error(error, 'Login Failed');
+  }
+  
+  if (success) {
+    console.log('External login successful');
+    this._ToastrService.success('Login successful!');
+  }
+  
+  // Clean URL
+  if (error || success) {
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
+}
 
   passwordMatchValidator(form: FormGroup): PasswordMatchErrors | null {
     const password = form.get('newPassword')?.value;

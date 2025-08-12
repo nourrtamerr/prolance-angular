@@ -236,12 +236,12 @@ ExternalLogin(provider: string, role?: UserRole, returnUrl?: string, errorUrl?: 
   }
 
   const url = `${this.apiUrl}/External-login?${params.toString()}`;
-
-  return new Observable(observer => {
-    window.location.href = url;
-    observer.next(null);
-    observer.complete();
-  });
+  
+  // Simply redirect - don't try to handle as Observable
+  window.location.href = url;
+  
+  // Return empty observable that never completes (since we're redirecting)
+  return new Observable(() => {});
 }
 
 // ExternalLogin(provider: string, role?: UserRole, returnUrl?: string, errorUrl?: string): Observable<any> {
