@@ -244,7 +244,7 @@ export class LoginComponent implements OnInit {
   }
 }
 
-private getTokenFromCookie(): string | null {
+ getTokenFromCookie(): string | null {
   const cookies = document.cookie.split(';');
   for (let cookie of cookies) {
     const [name, value] = cookie.trim().split('=');
