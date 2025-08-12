@@ -115,17 +115,7 @@ export class AuthService {
     }
   }
 
-  getUserId(): string | null {
-    const token = this.getTokenFromCookie();
-    if (!token) return null;
 
-    try {
-      const decoded: any = jwtDecode(token);
-      return decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'] || null;
-    } catch {
-      return null;
-    }
-  }
 
   getUserName(): string | null {
     const token = this.getTokenFromCookie();
@@ -163,7 +153,9 @@ export class AuthService {
   }
 
    getTokenFromCookie(): string | null {
+   
     const cookies = document.cookie.split(';');
+    console.log(`cookies from getTokenFromCookie:${cookies}`)
     for (let cookie of cookies) {
       const [name, value] = cookie.trim().split('=');
       if (name === this.tokenKey) {
@@ -213,13 +205,28 @@ export class AuthService {
   // }
 
   // Update your AuthService deCodeUserData method
+
+
+    getUserId(): string | null {
+    const token = this.getTokenFromCookie();
+    if (!token) return null;
+
+    try {
+      const decoded: any = jwtDecode(token);
+      return decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'] || null;
+    } catch {
+      return null;
+    }
+  }
+
+
 deCodeUserData(token: string): void {
   try {
     const payload = JSON.parse(atob(token.split('.')[1]));
     
     const userData = {
-      id: payload[Object.keys(payload).find(key => 
-        key.includes('nameidentifier')) || ''],
+      id: payload[Object.keys(payload).find(key => key.includes('nameidentifier')) || ''],
+
       username: payload[Object.keys(payload).find(key => 
         key.includes('unique_name') || key === 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name') || ''],
       email: payload[Object.keys(payload).find(key => 

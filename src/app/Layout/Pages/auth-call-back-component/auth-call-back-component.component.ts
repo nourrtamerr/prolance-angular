@@ -21,6 +21,7 @@ export class AuthCallBackComponentComponent implements OnInit {
     ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       const token = params['token'];
+      console.log(`token: ${token}`)
       const error = params['error'];
 
       if (error) {
