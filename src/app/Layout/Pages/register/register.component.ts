@@ -140,16 +140,16 @@ export class RegisterComponent implements OnInit {
 
       this.authService.logout();
 
-      this._AccountService.ExternalLogin(this.provider, role, returnUrl, errorUrl)
-        .pipe(
-          catchError((error) => {
-            this.errorMessage = 'External login initiation failed. Please try again.';
-            this._toaste.error(this.errorMessage, `${this.provider} Login Failed`);
-            // this.currentForm = 'login';
-            return of(null);
-          })
-        )
-        .subscribe();
+      this._AccountService.ExternalLogin(this.provider, role, returnUrl, errorUrl);
+        // .pipe(
+        //   catchError((error) => {
+        //     this.errorMessage = 'External login initiation failed. Please try again.';
+        //     this._toaste.error(this.errorMessage, `${this.provider} Login Failed`);
+        //     // this.currentForm = 'login';
+        //     return of(null);
+        //   })
+        // )
+        // .subscribe();
     }
     roles=UserRole;
   onSubmit(): void {
