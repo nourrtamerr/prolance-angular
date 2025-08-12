@@ -76,6 +76,8 @@ onWindowScroll() {
 
   ngOnInit(): void {
 
+    console.log(`role from navbar: ${this.AuthService.getRole()}`)
+
     this.accountService.getImagebyUserName(this.AuthService.getUserName()!).subscribe((res:any)=>{
       this.userImage = res.fileName;
       console.log("image:",this.userImage);
@@ -88,6 +90,8 @@ onWindowScroll() {
         const role = user['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
         this.role = role?.toLowerCase() || null;
         console.log(this.role);
+        
+        
       }
     });
     this.subscriptions.push(
