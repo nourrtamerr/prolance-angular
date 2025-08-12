@@ -212,9 +212,13 @@ export class AuthService {
     if (!token) return null;
 
     try {
-      const decoded: any = jwtDecode(token);
-      return decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'] || null;
-    } catch {
+      // const decoded: any = jwtDecode(token);
+      // return decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'] || null;
+    const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload[Object.keys(payload).find(key => key.includes('nameidentifier')) || '']
+    } 
+    
+    catch {
       return null;
     }
   }
