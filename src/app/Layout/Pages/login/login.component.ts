@@ -106,11 +106,14 @@ export class LoginComponent implements OnInit {
     this.authService.isLoggedIn$.subscribe((isLoggedIn) => {
       this.isLoging = isLoggedIn;
       if (isLoggedIn) {
+        console.log('User is already authenticated, redirecting to home');
         this.router.navigate(['/home']);
+        return;
       }
     });
 
     this.checkExternalLogin();
+    this.processQueryParams();
 ;
     console.log('Role:', this.authService.getRole());
 
@@ -183,7 +186,7 @@ export class LoginComponent implements OnInit {
 
   ExternalLogin(provider: 'Google' | 'Facebook'): void {
     const returnUrl = `${this.frontendBase}/home`;
-    const errorUrl = `${this.frontendBase}/home`;
+    const errorUrl = `${this.frontendBase}/login`;
 
     console.log(`Initiating ${provider} login...`);
     this._ToastrService.info(`Redirecting to ${provider} login...`, 'Please wait');
@@ -215,18 +218,41 @@ export class LoginComponent implements OnInit {
 
   if (error) {
     console.error('External login error:', error);
-    this._ToastrService.error(error, 'Login Failed');
-  }
-  
-  if (success) {
-    console.log('External login successful');
-    this._ToastrService.success('Login successful!');
-  }
-  
-  // Clean URL
-  if (error || success) {
+    this._ToastrService.error(decodeURIComponent(error), 'Login Failed');
     window.history.replaceState({}, document.title, window.location.pathname);
+    return;
   }
+  
+  // if (success) {
+  //   console.log('External login successful');
+  //   this._ToastrService.success('Login successful!');
+  // }
+  
+  // // Clean URL
+  // if (error || success) {
+  //   window.history.replaceState({}, document.title, window.location.pathname);
+  // }
+
+   const token = this.getTokenFromCookie();
+  if (token && !this.authService.isLoggedIn()) {
+    console.log('Found token from external login, initializing auth');
+    this.authService.deCodeUserData(token);
+    this._ToastrService.success('Login successful!', 'Welcome');
+    setTimeout(() => {
+      this.router.navigate(['/home']);
+    }, 100);
+  }
+}
+
+private getTokenFromCookie(): string | null {
+  const cookies = document.cookie.split(';');
+  for (let cookie of cookies) {
+    const [name, value] = cookie.trim().split('=');
+    if (name === 'user_Token') {
+      return decodeURIComponent(value);
+    }
+  }
+  return null;
 }
 
   passwordMatchValidator(form: FormGroup): PasswordMatchErrors | null {
