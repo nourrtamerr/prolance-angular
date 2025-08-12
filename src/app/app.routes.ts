@@ -44,6 +44,7 @@ import { ChatbotComponent } from './Layout/Pages/Chatbot/chatbot/chatbot.compone
 import { AdminDataManagementComponent } from './Layout/Pages/admin-data-management/admin-data-management.component';
 import { DisputesystemComponent } from './Layout/Pages/disputesystem/disputesystem.component';
 import { AdminnavbarComponent } from './Layout/Pages/adminnavbar/adminnavbar.component';
+import { AuthCallBackComponentComponent } from './Layout/Pages/auth-call-back-component/auth-call-back-component.component';
 
 export const routes: Routes = [
     {path: '', redirectTo: 'home', pathMatch: 'full'},
@@ -51,6 +52,7 @@ export const routes: Routes = [
     { path: 'home', component: HomeComponent },
     {path: 'fixed', component: FixedProjectComponent,canActivate: [clientOrFreelancerGuard] },
     {path: 'createproject', component: CreateProjectComponent ,canActivate: [clientGuard]},
+    {path: 'auth-callback',component: AuthCallBackComponentComponent},
     {path: 'subscribtion', component: SubscribtionPlanComponent,canActivate: [clientOrFreelancerGuard] },
   {  path: 'fixed-project/:id',
     loadComponent: () => import('../app/Layout/Pages/fixed-project-details/fixed-project-details.component')

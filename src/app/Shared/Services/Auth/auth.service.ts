@@ -184,33 +184,64 @@ export class AuthService {
     }
   }
 
-  deCodeUserData(token: string): void {
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
+  // deCodeUserData(token: string): void {
+  //   try {
+  //     const payload = JSON.parse(atob(token.split('.')[1]));
       
-      const userData = {
-        id: payload[Object.keys(payload).find(key => 
-          key.includes('nameidentifier')) || ''],
-        username: payload[Object.keys(payload).find(key => 
-          key.includes('unique_name') || key.includes('name')) || ''],
-        email: payload[Object.keys(payload).find(key => 
-          key.includes('email')) || ''],
-        role: payload[Object.keys(payload).find(key => 
-          key.includes('role')) || '']
-      };
+  //     const userData = {
+  //       id: payload[Object.keys(payload).find(key => 
+  //         key.includes('nameidentifier')) || ''],
+  //       username: payload[Object.keys(payload).find(key => 
+  //         key.includes('unique_name') || key.includes('name')) || ''],
+  //       email: payload[Object.keys(payload).find(key => 
+  //         key.includes('email')) || ''],
+  //       role: payload[Object.keys(payload).find(key => 
+  //         key.includes('role')) || '']
+  //     };
 
-      this.userSubject.next(userData);
-      this.loggedInSubject.next(true);
+  //     this.userSubject.next(userData);
+  //     this.loggedInSubject.next(true);
       
-      // Store in localStorage for consistency
-      localStorage.setItem(this.tokenKey, token);
+  //     // Store in localStorage for consistency
+  //     localStorage.setItem(this.tokenKey, token);
       
-      console.log('User authenticated:', userData);
-    } catch (error) {
-      console.error('Error decoding token:', error);
-      this.logout();
-    }
+  //     console.log('User authenticated:', userData);
+  //   } catch (error) {
+  //     console.error('Error decoding token:', error);
+  //     this.logout();
+  //   }
+  // }
+
+  // Update your AuthService deCodeUserData method
+deCodeUserData(token: string): void {
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    
+    const userData = {
+      id: payload[Object.keys(payload).find(key => 
+        key.includes('nameidentifier')) || ''],
+      username: payload[Object.keys(payload).find(key => 
+        key.includes('unique_name') || key === 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name') || ''],
+      email: payload[Object.keys(payload).find(key => 
+        key.includes('email')) || ''],
+      role: payload[Object.keys(payload).find(key => 
+        key.includes('role')) || '']
+    };
+
+    console.log('Decoded user data:', userData);
+    console.log('Full token payload:', payload);
+
+    this.userSubject.next(userData);
+    this.loggedInSubject.next(true);
+    
+    // Store token in localStorage
+    localStorage.setItem('user_Token', token);
+    
+  } catch (error) {
+    console.error('Error decoding token:', error);
+    this.logout();
   }
+}
 
   logout(): void {
     localStorage.removeItem(this.tokenKey);
