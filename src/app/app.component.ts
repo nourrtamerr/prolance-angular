@@ -28,7 +28,7 @@ export class AppComponent {
         filter(event => event instanceof NavigationEnd)
       ).subscribe((event: NavigationEnd) => {
         const url = event.urlAfterRedirects;
-        console.log('url issss',url)
+        console.log('url is',url)
         this.showNavbar = url !== '/login' && url !== '/register';
         console.log('this.showNavbar',this.showNavbar)
 
