@@ -38,7 +38,8 @@ export class NotificationsService {
            .withUrl(Environment.notificationsUrl, { 
              accessTokenFactory: () => {
               console.log("accessing token");
-               const token = this.authService.getTokenFromCookie();
+               //const token = this.authService.getTokenFromCookie();
+               const token = this.authService.getToken();
                if (!token) {
                  console.warn('No auth token available');
                  return '';

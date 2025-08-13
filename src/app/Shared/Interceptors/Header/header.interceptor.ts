@@ -12,7 +12,8 @@ export const headerInterceptor: HttpInterceptorFn = (req, next) => {
     }
 
     const authService = inject(AuthService);
-    const token = authService.getTokenFromCookie();
+    // const token = authService.getTokenFromCookie();
+    const token = authService.getToken();
 
     let headers: Record<string, string> = {
       Authorization: `Bearer ${token}`,

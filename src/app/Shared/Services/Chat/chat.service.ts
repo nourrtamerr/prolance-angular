@@ -46,7 +46,9 @@ export class ChatService implements OnDestroy {
       this.hubConnection = new HubConnectionBuilder()
         .withUrl(Environment.signalRUrl, { 
           accessTokenFactory: () => {
-            const token = this.authService.getTokenFromCookie();
+            //const token = this.authService.getTokenFromCookie();
+            const token = this.authService.getToken();
+
             if (!token) {
               console.warn('No auth token available');
               return '';
