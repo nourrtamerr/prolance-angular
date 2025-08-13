@@ -185,7 +185,8 @@ export class LoginComponent implements OnInit {
   }
 
   ExternalLogin(provider: 'Google' | 'Facebook'): void {
-    const returnUrl = `${this.frontendBase}/home`;
+    // const returnUrl = `${this.frontendBase}/home`;
+    const returnUrl = `${this.frontendBase}/auth-callback`;
     const errorUrl = `${this.frontendBase}/login`;
 
     console.log(`Initiating ${provider} login...`);
@@ -211,49 +212,41 @@ export class LoginComponent implements OnInit {
   }
 
 
-  checkExternalLogin(): void {
-  const url = new URL(window.location.href);
-  const error = url.searchParams.get('error');
-  const success = url.searchParams.get('success');
+//   checkExternalLogin(): void {
+//   const url = new URL(window.location.href);
+//   const error = url.searchParams.get('error');
+//   const success = url.searchParams.get('success');
 
-  if (error) {
-    console.error('External login error:', error);
-    this._ToastrService.error(decodeURIComponent(error), 'Login Failed');
-    window.history.replaceState({}, document.title, window.location.pathname);
-    return;
-  }
+//   if (error) {
+//     console.error('External login error:', error);
+//     this._ToastrService.error(decodeURIComponent(error), 'Login Failed');
+//     window.history.replaceState({}, document.title, window.location.pathname);
+//     return;
+//   }
   
-  // if (success) {
-  //   console.log('External login successful');
-  //   this._ToastrService.success('Login successful!');
-  // }
-  
-  // // Clean URL
-  // if (error || success) {
-  //   window.history.replaceState({}, document.title, window.location.pathname);
-  // }
 
-   const token = this.getTokenFromCookie();
-  if (token && !this.authService.isLoggedIn()) {
-    console.log('Found token from external login, initializing auth');
-    this.authService.deCodeUserData(token);
-    this._ToastrService.success('Login successful!', 'Welcome');
-    setTimeout(() => {
-      this.router.navigate(['/home']);
-    }, 100);
-  }
-}
 
- getTokenFromCookie(): string | null {
-  const cookies = document.cookie.split(';');
-  for (let cookie of cookies) {
-    const [name, value] = cookie.trim().split('=');
-    if (name === 'user_Token') {
-      return decodeURIComponent(value);
-    }
-  }
-  return null;
-}
+//    const token = this.getTokenFromCookie();
+//   if (token && !this.authService.isLoggedIn()) {
+//     console.log('Found token from external login, initializing auth');
+//     this.authService.deCodeUserData(token);
+//     this._ToastrService.success('Login successful!', 'Welcome');
+//     setTimeout(() => {
+//       this.router.navigate(['/home']);
+//     }, 100);
+//   }
+// }
+
+//  getTokenFromCookie(): string | null {
+//   const cookies = document.cookie.split(';');
+//   for (let cookie of cookies) {
+//     const [name, value] = cookie.trim().split('=');
+//     if (name === 'user_Token') {
+//       return decodeURIComponent(value);
+//     }
+//   }
+//   return null;
+// }
 
   passwordMatchValidator(form: FormGroup): PasswordMatchErrors | null {
     const password = form.get('newPassword')?.value;

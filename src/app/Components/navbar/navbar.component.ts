@@ -100,11 +100,48 @@ onWindowScroll() {
   this.role = this.AuthService.getRole()?.toLowerCase() || null;
   
   // Also subscribe to auth state changes
+  // this.AuthService.isLoggedIn$.subscribe((isLoggedIn) => {
+  //   if (isLoggedIn) {
+  //     this.role = this.AuthService.getRole()?.toLowerCase() || null;
+  //   } else {
+  //     this.role = null;
+  //   }
+  // });
+
+
+    // Subscribe to auth state changes with better error handling
   this.AuthService.isLoggedIn$.subscribe((isLoggedIn) => {
+    this.isLoggedIn = isLoggedIn;
+    console.log('Auth status changed:', isLoggedIn);
+    
     if (isLoggedIn) {
+      // Update role and username when logged in
       this.role = this.AuthService.getRole()?.toLowerCase() || null;
+      this.username = this.AuthService.getUserName() || '';
+      
+      console.log('Updated role:', this.role);
+      console.log('Updated username:', this.username);
+      
+      // Load user image if we have a username
+      if (this.username) {
+        this.accountService.getImagebyUserName(this.username).subscribe({
+          next: (res: any) => {
+            this.userImage = res.fileName;
+            console.log("image:", this.userImage);
+          },
+          error: (err) => {
+            console.log('Error loading user image:', err);
+          }
+        });
+      }
+      
+      this.loadNotifications();
     } else {
       this.role = null;
+      this.username = '';
+      this.userImage = null;
+      this.notifications = [];
+      this.unreadNotifications = 0;
     }
   });
 

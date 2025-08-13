@@ -154,8 +154,8 @@ export class AuthService {
     
     // If no token in localStorage, check cookies (for external login)
     if (!token) {
-      // token = this.getTokenFromCookie();
-      token = this.getToken();
+      token = this.getTokenFromCookie();
+      // token = this.getToken();
     }
 
     if (token && !this.isTokenExpired(token)) {
@@ -163,7 +163,9 @@ export class AuthService {
       // Optionally save to localStorage for consistency
       localStorage.setItem(this.tokenKey, token);
     } else {
-      this.logout();
+      // this.logout();
+      this.userSubject.next(null);
+    this.loggedInSubject.next(false);
     }
   }
 
@@ -285,7 +287,12 @@ deCodeUserData(token: string): void {
     // this.router.navigate(['/home']);
 
     const currentUrl = this.router.url;
-  if (!currentUrl.includes('/login') && !currentUrl.includes('/register')) {
+  // if (!currentUrl.includes('/login') && !currentUrl.includes('/register')) {
+  //   this.router.navigate(['/home']);
+  // }
+   if (!currentUrl.includes('/login') && 
+      !currentUrl.includes('/register') && 
+      !currentUrl.includes('/auth-callback')) {
     this.router.navigate(['/home']);
   }
 

@@ -58,6 +58,80 @@
 
 
 
+// import { Component, OnInit } from '@angular/core';
+// import { ActivatedRoute, Router } from '@angular/router';
+// import { AuthService } from '../../../Shared/Services/Auth/auth.service';
+// import { ToastrService } from 'ngx-toastr';
+// import { CommonModule } from '@angular/common';
+
+// @Component({
+//   selector: 'app-auth-call-back-component',
+//   imports: [CommonModule],
+//   templateUrl: './auth-call-back-component.component.html',
+//   styleUrls: ['./auth-call-back-component.component.css']
+// })
+// export class AuthCallBackComponentComponent implements OnInit {
+  
+//   constructor(
+//     private route: ActivatedRoute,
+//     private router: Router,
+//     private authService: AuthService,
+//     private toastr: ToastrService
+//   ) {}
+  
+//   ngOnInit(): void {
+//     this.route.queryParams.subscribe(params => {
+//       const token = params['token'];
+//       console.log(`token: ${token}`);
+//       const error = params['error'];
+
+//       if (error) {
+//         console.error('Auth callback error:', error);
+//         this.toastr.error(decodeURIComponent(error), 'Authentication Failed');
+//         this.router.navigate(['/login']);
+//         return;
+//       }
+
+//       if (token) {
+//         try {
+//           const decodedToken = decodeURIComponent(token);
+          
+//           // Store token in both localStorage and cookie for consistency
+//           localStorage.setItem('user_Token', decodedToken);
+//           document.cookie = `user_Token=${decodedToken}; path=/; secure; samesite=Lax`;
+          
+//           // Decode the token and set user data
+//           this.authService.deCodeUserData(decodedToken);
+          
+//           this.toastr.success('Login successful!', 'Welcome');
+          
+//           // Small delay to ensure auth state is updated
+//           setTimeout(() => {
+//             this.router.navigate(['/home']);
+//           }, 500);
+          
+//         } catch (error) {
+//           console.error('Token processing error:', error);
+//           this.toastr.error('Authentication failed', 'Error');
+//           this.router.navigate(['/login']);
+//         }
+//       } else {
+//         console.error('No token received in auth callback');
+//         this.toastr.error('No authentication token received', 'Error');
+//         this.router.navigate(['/login']);
+//       }
+//     });
+//   }
+// }
+
+
+
+
+
+
+
+
+
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../../Shared/Services/Auth/auth.service';
@@ -80,10 +154,14 @@ export class AuthCallBackComponentComponent implements OnInit {
   ) {}
   
   ngOnInit(): void {
+    console.log('Auth callback component initialized');
+    
     this.route.queryParams.subscribe(params => {
       const token = params['token'];
-      console.log(`token: ${token}`);
       const error = params['error'];
+      
+      console.log('Auth callback - token:', token ? 'Present' : 'Missing');
+      console.log('Auth callback - error:', error);
 
       if (error) {
         console.error('Auth callback error:', error);
@@ -95,6 +173,7 @@ export class AuthCallBackComponentComponent implements OnInit {
       if (token) {
         try {
           const decodedToken = decodeURIComponent(token);
+          console.log('Processing token...');
           
           // Store token in both localStorage and cookie for consistency
           localStorage.setItem('user_Token', decodedToken);
@@ -103,12 +182,14 @@ export class AuthCallBackComponentComponent implements OnInit {
           // Decode the token and set user data
           this.authService.deCodeUserData(decodedToken);
           
+          console.log('Token processed successfully');
           this.toastr.success('Login successful!', 'Welcome');
           
-          // Small delay to ensure auth state is updated
+          // Redirect to home with a delay to ensure auth state is fully updated
           setTimeout(() => {
+            console.log('Redirecting to home...');
             this.router.navigate(['/home']);
-          }, 500);
+          }, 1000);
           
         } catch (error) {
           console.error('Token processing error:', error);
