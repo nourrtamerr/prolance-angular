@@ -45,7 +45,7 @@ onWindowScroll() {
   }
 }
 
-  username!:string;
+  username:string|null=null;
   constructor(
     private AuthService: AuthService,
     private notificationsService: NotificationsService,
@@ -77,11 +77,15 @@ onWindowScroll() {
   ngOnInit(): void {
 
     console.log(`role from navbar: ${this.AuthService.getRole()}`)
+    this.username=this.AuthService.getUserName();
 
-    this.accountService.getImagebyUserName(this.AuthService.getUserName()!).subscribe((res:any)=>{
-      this.userImage = res.fileName;
-      console.log("image:",this.userImage);
-    })
+    if(this.username){
+
+      this.accountService.getImagebyUserName(this.AuthService.getUserName()!).subscribe((res:any)=>{
+        this.userImage = res.fileName;
+        console.log("image:",this.userImage);
+      })
+    }
 
 
     this.username = this.AuthService.getUserName() || '';
