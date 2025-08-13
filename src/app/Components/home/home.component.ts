@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../Shared/Services/Auth/auth.service';
 import { CategoryService } from '../../Shared/Services/Category/category.service';
 import { ProjectsService } from '../../Shared/Services/Projects/projects.service';
@@ -26,7 +26,8 @@ export class HomeComponent implements OnInit {
       private projectService:ProjectsService,
       private subcategoryService:SubCategoryService,
       private biddingProjectService: BiddingProjectService,
-      private reviweService:ReviewService
+      private reviweService:ReviewService,
+      public router:Router
     ) { }
 
 
@@ -47,6 +48,7 @@ export class HomeComponent implements OnInit {
     searchResults: any[] = [];
     showSuggestions = false;
 
+    isLoggedIn=false;
 
   ngOnInit(): void {
     
@@ -61,6 +63,8 @@ export class HomeComponent implements OnInit {
         console.log('Error :',err );
       }
     })
+
+    this.isLoggedIn=this.AuthService.isLoggedIn();
 
     // this.biddingProjectService.GetAllBiddingProjects({},1,100).subscribe({
     //   next: (response) => {
@@ -262,6 +266,15 @@ export class HomeComponent implements OnInit {
     this.searchTerm = '';
   }
 
+    onActionClick(): void {
+    if (this.AuthService.isLoggedIn()) {
+      
+      this.router.navigate(['/new']);
+    } else {
+      
+      this.router.navigate(['/login']);
+    }
+  }
 
 
 }

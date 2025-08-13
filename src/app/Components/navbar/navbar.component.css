@@ -148,7 +148,9 @@
 }
 /* Sign Up Button */
 .signup-btn {
-  background-color: #108a00;
+  /* background-color: #108a00; */
+  background-color: white;
+  color:#175b99;
   border: none;
   border-radius: 20px;
   padding: 0.5rem 1.25rem;

@@ -57,7 +57,7 @@
                   <div class="suggestion-item" 
                        *ngFor="let project of searchResults"
                        [routerLink]="project.projectType === 'bidding' ? ['/details', project.id] : ['/fixed-project', project.id]"
-                       (click)="onSuggestionClick(project)">
+                       (click)="isLoggedIn? onSuggestionClick(project) : router.navigate(['/login'])">
                     <div class="suggestion-title">{{ project.title }}</div>
                     <div class="suggestion-type">{{ project.projectType }}</div>
                     <div class="suggestion-desc">{{ project.description | slice:0:100 }}...</div>
@@ -74,7 +74,12 @@
           <div class="row mb-4">
             <div class="col-12">
               <div class="trending-tags d-flex flex-wrap">
-                <span class="badge" *ngFor="let tag of trendingTags">{{ tag }}</span>
+                
+
+                  <span class="badge"  *ngFor="let tag of trendingTags" (click)="onActionClick()">
+                      {{ tag }}
+                  </span>
+                
               </div>
             </div>
           </div>
@@ -103,11 +108,13 @@
   <div class="container">
     <h2 class="browse-category-title mb-2">Browse talent by category</h2>
     <div class="browse-category-sub mb-4">
-      Looking for work? <a [routerLink]="['/new']" class="browse-jobs-link">Browse jobs</a>
+      Looking for work? <a (click)="onActionClick()" class="browse-jobs-link">Browse jobs</a>
     </div>
     <div class="row g-4">
       <div class="col-md-6 col-lg-3" *ngFor="let cat of categories">
-        <a [routerLink]="['/new',cat.id]" >
+                <!-- <a [routerLink]="['/new',cat.id]" > -->
+
+        <a (click)="isLoggedIn? router.navigate(['/new',cat.id]): router.navigate(['/login'])">
           <div class="category-card-custom p-4 h-100">
             <div class="category-card-title mb-3">{{ cat.name }}</div>
             <div class="d-flex align-items-center gap-3">
@@ -145,7 +152,12 @@
         <li><i class="fa fa-check-circle"></i> Control your workflow: hire, classify and pay your talent</li>
         <li><i class="fa fa-check-circle"></i> Partner with Upwork for end-to-end support</li>
       </ul>
-      <button class="btn btn-light enterprise-suite-btn">Learn more</button>
+      <button class="btn btn-light enterprise-suite-btn" (click)="onActionClick()">
+       
+
+          Learn more
+       
+      </button>
     </div>
     <div class="enterprise-suite-image flex-fill">
       <img src="images/try.jpg" alt="Enterprise Suite" />
@@ -176,14 +188,14 @@
             <div class="row g-3 pb-4 pb-md-5 mx-0">
               <div class="col-md-4">
                 <div class="find-talent-action-card h-100">
-                  <div class="action-title">Post a job and hire a pro</div>
-                  <div class="action-desc">Talent Marketplace<sup>™</sup> &rarr;</div>
+                  <div class="action-title" (click)="onActionClick()"> Post a job and hire a pro </div>
+                  <div class="action-desc" (click)="onActionClick()">Talent Marketplace<sup>™</sup> &rarr;</div>
                 </div>
               </div>
               <div class="col-md-4">
                 <div class="find-talent-action-card h-100">
-                  <div class="action-title">Browse and buy projects</div>
-                  <div class="action-desc">Project Catalog<sup>™</sup> &rarr;</div>
+                  <div class="action-title" (click)="onActionClick()">Browse and buy projects</div>
+                  <div class="action-desc" (click)="onActionClick()">Project Catalog<sup>™</sup> &rarr;</div>
                 </div>
               </div>
               <div class="col-md-4">
