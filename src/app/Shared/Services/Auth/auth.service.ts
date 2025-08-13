@@ -260,6 +260,9 @@ deCodeUserData(token: string): void {
     document.cookie = `${this.tokenKey}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
     this.userSubject.next(null);
     this.loggedInSubject.next(false);
+
+    this.router.navigate(['/home']);
+
   }
 
   getRole(): string | null {
