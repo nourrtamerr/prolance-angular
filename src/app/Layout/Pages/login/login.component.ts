@@ -112,7 +112,7 @@ export class LoginComponent implements OnInit {
       }
     });
 
-    this.checkExternalLogin();
+    // this.checkExternalLogin();
     this.processQueryParams();
     console.log('Role:', this.authService.getRole());
 
