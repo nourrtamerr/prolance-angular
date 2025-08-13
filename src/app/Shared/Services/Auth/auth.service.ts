@@ -101,7 +101,8 @@ export class AuthService {
 
 
   getRoles(): string[] | null {
-    const token = this.getTokenFromCookie();
+    // const token = this.getTokenFromCookie();
+    const token = this.getToken();
     if (!token) return null;
   
     try {
@@ -153,7 +154,8 @@ export class AuthService {
     
     // If no token in localStorage, check cookies (for external login)
     if (!token) {
-      token = this.getTokenFromCookie();
+      // token = this.getTokenFromCookie();
+      token = this.getToken();
     }
 
     if (token && !this.isTokenExpired(token)) {
@@ -226,7 +228,8 @@ export class AuthService {
   // }
 
   getUserId(): string | null {
-  const token = this.getTokenFromCookie() || localStorage.getItem(this.tokenKey);
+  // const token = this.getTokenFromCookie() || localStorage.getItem(this.tokenKey);
+  const token = this.getToken() || localStorage.getItem(this.tokenKey);
   if (!token) return null;
 
   try {
