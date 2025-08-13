@@ -117,17 +117,30 @@ export class AuthService {
 
 
 
-  getUserName(): string | null {
-    const token = this.getTokenFromCookie();
-    if (!token) return null;
+  // getUserName(): string | null {
+  //   const token = this.getTokenFromCookie();
+  //   if (!token) return null;
 
-    try {
-      const decoded: any = jwtDecode(token);
-      return decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'] || null;
-    } catch {
-      return null;
-    }
+  //   try {
+  //     const decoded: any = jwtDecode(token);
+  //     return decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'] || null;
+  //   } catch {
+  //     return null;
+  //   }
+  // }
+
+
+  getUserName(): string | null {
+  const token = this.getToken(); // Changed this line
+  if (!token) return null;
+
+  try {
+    const decoded: any = jwtDecode(token);
+    return decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'] || null;
+  } catch {
+    return null;
   }
+}
 
 
 
@@ -152,18 +165,7 @@ export class AuthService {
     }
   }
 
-   getTokenFromCookie(): string | null {
-   
-    const cookies = document.cookie.split(';');
-    console.log(`cookies from getTokenFromCookie:${cookies}`)
-    for (let cookie of cookies) {
-      const [name, value] = cookie.trim().split('=');
-      if (name === this.tokenKey) {
-        return decodeURIComponent(value);
-      }
-    }
-    return null;
-  }
+
 
   private isTokenExpired(token: string): boolean {
     try {
@@ -207,21 +209,37 @@ export class AuthService {
   // Update your AuthService deCodeUserData method
 
 
-    getUserId(): string | null {
-    const token = this.getTokenFromCookie();
-    if (!token) return null;
+  //   getUserId(): string | null {
+  //   const token = this.getTokenFromCookie();
+  //   if (!token) return null;
 
-    try {
-      // const decoded: any = jwtDecode(token);
-      // return decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'] || null;
-    const payload = JSON.parse(atob(token.split('.')[1]));
-      return payload[Object.keys(payload).find(key => key.includes('nameidentifier')) || '']
-    } 
+  //   try {
+  //     // const decoded: any = jwtDecode(token);
+  //     // return decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'] || null;
+  //   const payload = JSON.parse(atob(token.split('.')[1]));
+  //     return payload[Object.keys(payload).find(key => key.includes('nameidentifier')) || '']
+  //   } 
     
-    catch {
-      return null;
-    }
+  //   catch {
+  //     return null;
+  //   }
+  // }
+
+  getUserId(): string | null {
+  const token = this.getTokenFromCookie() || localStorage.getItem(this.tokenKey);
+  if (!token) return null;
+
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    const userIdKey = Object.keys(payload).find(key => 
+      key.includes('nameidentifier')
+    );
+    return userIdKey ? payload[userIdKey] : null;
+  } catch (error) {
+    console.error('Error getting user ID:', error);
+    return null;
   }
+}
 
 
 deCodeUserData(token: string): void {
@@ -263,20 +281,86 @@ deCodeUserData(token: string): void {
 
     // this.router.navigate(['/home']);
 
+    const currentUrl = this.router.url;
+  if (!currentUrl.includes('/login') && !currentUrl.includes('/register')) {
+    this.router.navigate(['/home']);
   }
 
-  getRole(): string | null {
-    const user = this.userSubject.value;
-    return user?.role || null;
   }
+
+  // getRole(): string | null {
+  //   const user = this.userSubject.value;
+  //   return user?.role || null;
+  // }
+
+  getRole(): string | null {
+  const token = this.getToken(); // Changed this line
+  if (!token) return null;
+
+  try {
+    const decoded: any = jwtDecode(token);
+    return decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] || null;
+  } catch {
+    return null;
+  }
+}
 
   isLoggedIn(): boolean {
     return this.loggedInSubject.value;
   }
 
   // Add this method to get current token
+  // getToken(): string | null {
+  //   return localStorage.getItem(this.tokenKey) || this.getTokenFromCookie();
+  // }
+
+
+  //    getTokenFromCookie(): string | null {
+   
+  //   const cookies = document.cookie.split(';');
+  //   console.log(`cookies from getTokenFromCookie:${cookies}`)
+  //   for (let cookie of cookies) {
+  //     const [name, value] = cookie.trim().split('=');
+  //     if (name === this.tokenKey) {
+  //       return decodeURIComponent(value);
+  //     }
+  //   }
+  //   return null;
+  // }
+
+
+
+
+
+
+
+
+
   getToken(): string | null {
-    return localStorage.getItem(this.tokenKey) || this.getTokenFromCookie();
+  // Check localStorage first (for regular login)
+  let token = localStorage.getItem(this.tokenKey);
+  
+  // If no token in localStorage, check cookies (for external login)
+  if (!token) {
+    token = this.getTokenFromCookie();
+    // If found in cookie, save to localStorage for consistency
+    if (token) {
+      localStorage.setItem(this.tokenKey, token);
+    }
   }
+  
+  return token;
+}
+
+private getTokenFromCookie(): string | null {
+  const cookies = document.cookie.split(';');
+  for (let cookie of cookies) {
+    const [name, value] = cookie.trim().split('=');
+    if (name === this.tokenKey) {
+      return decodeURIComponent(value);
+    }
+  }
+  return null;
+}
   
 }

@@ -85,15 +85,31 @@ onWindowScroll() {
 
 
     this.username = this.AuthService.getUserName() || '';
-    this.AuthService.userData.subscribe((user) => {
-      if (user) {
-        const role = user['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
-        this.role = role?.toLowerCase() || null;
-        console.log(this.role);
+    // this.AuthService.userData.subscribe((user) => {
+    //   if (user) {
+    //     const role = user['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+    //     this.role = role?.toLowerCase() || null;
+    //     console.log(this.role);
         
         
-      }
-    });
+    //   }
+    // });
+
+
+      // Replace the userData subscription with direct role assignment
+  this.role = this.AuthService.getRole()?.toLowerCase() || null;
+  
+  // Also subscribe to auth state changes
+  this.AuthService.isLoggedIn$.subscribe((isLoggedIn) => {
+    if (isLoggedIn) {
+      this.role = this.AuthService.getRole()?.toLowerCase() || null;
+    } else {
+      this.role = null;
+    }
+  });
+
+
+
     this.subscriptions.push(
       this.notificationsService.AllNotificaitions.subscribe(notifications => {
         this.notifications = notifications;
