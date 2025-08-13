@@ -261,7 +261,7 @@ deCodeUserData(token: string): void {
     this.userSubject.next(null);
     this.loggedInSubject.next(false);
 
-    this.router.navigate(['/home']);
+    // this.router.navigate(['/home']);
 
   }
 
